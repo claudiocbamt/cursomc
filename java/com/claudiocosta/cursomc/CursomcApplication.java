@@ -1,5 +1,6 @@
 package com.claudiocosta.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.claudiocosta.cursomc.domain.Cidade;
 import com.claudiocosta.cursomc.domain.Cliente;
 import com.claudiocosta.cursomc.domain.Endereco;
 import com.claudiocosta.cursomc.domain.Estado;
+import com.claudiocosta.cursomc.domain.Pagamento;
+import com.claudiocosta.cursomc.domain.PagamentoComBoleto;
+import com.claudiocosta.cursomc.domain.PagamentoComCartao;
+import com.claudiocosta.cursomc.domain.Pedido;
 import com.claudiocosta.cursomc.domain.Produto;
+import com.claudiocosta.cursomc.domain.enums.EstadoPagamento;
 import com.claudiocosta.cursomc.domain.enums.TipoCliente;
 import com.claudiocosta.cursomc.repositories.CategoriaRepository;
 import com.claudiocosta.cursomc.repositories.CidadeRepository;
 import com.claudiocosta.cursomc.repositories.ClienteRepository;
 import com.claudiocosta.cursomc.repositories.EnderecoRepository;
 import com.claudiocosta.cursomc.repositories.EstadoRepository;
+import com.claudiocosta.cursomc.repositories.PagamentoRepository;
+import com.claudiocosta.cursomc.repositories.PedidoRepository;
 import com.claudiocosta.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -37,6 +45,13 @@ public class CursomcApplication implements CommandLineRunner {
  
   @Autowired
 	private EnderecoRepository enderecoRepository;
+  
+  @Autowired
+	private PedidoRepository pedidoRepository;
+
+@Autowired
+	private PagamentoRepository pagamentoRepository;
+    
  
    
   
@@ -69,11 +84,7 @@ public class CursomcApplication implements CommandLineRunner {
 		 Cidade c3 = new Cidade(null, "Campinas", est2);
 		 
 		 est1.getCidades().addAll(Arrays.asList(c1));
-		 est2.getCidades().addAll(Arrays.asList(c2,c3));
-		 
-		 
-		 
-		 
+		 est2.getCidades().addAll(Arrays.asList(c2,c3)); 
 		 
 		 
 		 categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
@@ -90,8 +101,24 @@ public class CursomcApplication implements CommandLineRunner {
 		 
 		 clienteRepository.saveAll(Arrays.asList(cli1));
 		 enderecoRepository.saveAll(Arrays.asList(e1,e2));
+		 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		 Pedido ped1 = new Pedido (null,sdf.parse("27/07/2017 23:00"),cli1,e1);
+		 Pedido ped2 = new Pedido (null,sdf.parse("27/07/2017 23:00"),cli1,e1);
 		 
+		
+		Pagamento pagto1 = new PagamentoComCartao(null,EstadoPagamento.QUITADO, ped1, 6);
+	    ped1.setPagamento(pagto1);
+		 
+	    Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 19:00"), sdf.parse("20/10/2017 19:00"));
+	    ped2.setPagamento(pagto2);
+	    
+	    cli1.getPedidos().addAll( Arrays.asList(ped1,ped2));
+	    
+	     pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
+		 pagamentoRepository.saveAll(Arrays.asList(pagto1,pagto2));
 	}
+
+	
 	
 	
 }
