@@ -3,10 +3,13 @@ package com.claudiocosta.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.claudiocosta.cursomc.domain.Categoria;
 import com.claudiocosta.cursomc.repositories.CategoriaRepository;
+import com.claudiocosta.cursomc.services.exception.DataIntegrityException;
 import com.claudiocosta.cursomc.services.exception.ObjectNotFoundException;
 
 @Service
@@ -33,4 +36,19 @@ public class CategoriaService {
 		Buscar(obj.getId());
 		return repo.save(obj);
 	}
+	
+	public void delete(Integer id)
+	{
+		//obj.setId(null);
+		Buscar(id);
+		try
+		{
+			 repo.deleteById(id);
+		}	
+		catch (DataIntegrityViolationException e)
+		{
+			throw new DataIntegrityException("Não é possivel excluir uma categoria que possuui produtos");
+		}
+		}
+	   
 }
