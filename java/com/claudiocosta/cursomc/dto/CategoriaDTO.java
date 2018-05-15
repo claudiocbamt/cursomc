@@ -2,6 +2,10 @@ package com.claudiocosta.cursomc.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.claudiocosta.cursomc.domain.Categoria;
 
 public class CategoriaDTO implements Serializable{
@@ -11,6 +15,19 @@ public class CategoriaDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	@NotEmpty(message="Preechimento obrigatório")
+	@Length(min=5, max=80, message="Minimo de 5 e maximo de 80 caracters")
+	private String nome;
+	
+	public CategoriaDTO()
+	{
+		
+	}
+	
+	public CategoriaDTO(Categoria obj) {
+		id = obj.getId();
+		nome = obj.getNome();
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -27,16 +44,5 @@ public class CategoriaDTO implements Serializable{
 		this.nome = nome;
 	}
 
-	private String nome;
-	
-	public CategoriaDTO()
-	{
-		
-	}
-	
-	public CategoriaDTO(Categoria obj) {
-		id = obj.getId();
-		nome = obj.getNome();
-	}
 
 }
