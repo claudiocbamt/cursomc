@@ -2,14 +2,17 @@ package com.claudiocosta.cursomc.dto;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.claudiocosta.cursomc.services.validadion.ClienteInsert;
 
 
 
+@ClienteInsert
 public class ClienteNewDTO implements Serializable{
 	
 	/**
@@ -21,17 +24,25 @@ public class ClienteNewDTO implements Serializable{
 	@Length(min=5, max=120, message="Minimo de 5 e maximo de 120 caracters")
 	private String nome;
 	@NotEmpty(message="Preechimento obrigatório")
+	@Column(unique=true)
 	@Email(message="Email inválido!")
 	private String email;
+	@NotEmpty(message="Preechimento obrigatório")	
 	private String cpfouCnpj;
 	private Integer tipo;
 	
+	@NotEmpty(message="Preechimento obrigatório")
 	private String logradouro;
+	@NotEmpty(message="Preechimento obrigatório")
 	private String numero;
+	@NotEmpty(message="Preechimento obrigatório")
 	private String complemento;
+	@NotEmpty(message="Preechimento obrigatório")
 	private String bairro;
+	@NotEmpty(message="Preechimento obrigatório")
 	private String cep;
-	private String Telefone1;
+	@NotEmpty(message="Preechimento obrigatório")
+	private String Telefone1;	
 	private String Telefone2;
 	private String Telefone3;
 	
